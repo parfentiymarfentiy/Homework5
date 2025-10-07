@@ -1,109 +1,81 @@
 #include <iostream>
-#include <cctype> 
-using namespace std;
 
-void removeCharAt(char* str, int index) {
-    if (index < 0) return; 
-    
-    char* p = str + index;
-    while (*p) {
-        *p = *(p + 1);
-        p++;
-    }
-}
+class Fraction {
+private:
+    int numerator;
+    int denominator;
 
-void removeAllChars(char* str, char c) {
-    char* dest = str;
-    char* src = str;
-    
-    while (*src) {
-        if (*src != c) {
-            *dest = *src;
-            dest++;
+    int gcd(int a, int b) const {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
         }
-        src++;
+        return a;
     }
-    *dest = '\0';
-}
 
-void insertCharAt(char* str, int pos, char c) {
-    char* p = str;
-    while (*p) p++;
-    p++;
-    
-    while (p > str + pos) {
-        *p = *(p - 1);
-        p--;
+    // Функція для спрощення дробу
+    void simplify() {
+        if (denominator == 0) {
+            throw std::invalid_argument("Знаменник не може бути нулем");
+        }
+
+        if (denominator < 0) {
+            numerator = -numerator;
+            denominator = -denominator;
+        }
+
+        int common = gcd(abs(numerator), abs(denominator));
+        numerator /= common;
+        denominator /= common;
     }
-    *(str + pos) = c;
-}
 
-void replaceDots(char* str) {
-    char* p = str;
-    while (*p) {
-        if (*p == '.') *p = '!';
-        p++;
+public:
+    Fraction(int num = 0, int den = 1) : numerator(num), denominator(den) {
+        simplify();
     }
-}
+    int getNumerator() const { return numerator; }
+    int getDenominator() const { return denominator; }
 
-int countChar(const char* str, char c) {
-    int count = 0;
-    const char* p = str;
-    while (*p) {
-        if (*p == c) count++;
-        p++;
+    Fraction operator+(const Fraction& other) const {
+        int new_num = numerator * other.denominator + other.numerator * denominator;
+        int new_den = denominator * other.denominator;
+        return Fraction(new_num, new_den);
     }
-    return count;
-}
 
-void countChars(const char* str, int& letters, int& digits, int& others) {
-    letters = digits = others = 0;
-    const char* p = str;
-    
-    while (*p) {
-        if (isalpha(*p)) letters++;
-        else if (isdigit(*p)) digits++;
-        else others++;
-        p++;
+    Fraction operator-(const Fraction& other) const {
+        int new_num = numerator * other.denominator - other.numerator * denominator;
+        int new_den = denominator * other.denominator;
+        return Fraction(new_num, new_den);
     }
-}
 
-int main() {
-    char str[100]; 
+    Fraction operator*(const Fraction& other) const {
+        int new_num = numerator * other.numerator;
+        int new_den = denominator * other.denominator;
+        return Fraction(new_num, new_den);
+    }
 
-    cout << "1. Введіть рядок: ";
-    cin.getline(str, 100);
-    removeCharAt(str, 3);
-    cout << "   Після видалення 3-го символу: " << str << endl;
+    Fraction operator/(const Fraction& other) const {
+        if (other.numerator == 0) {
+            throw std::invalid_argument("Ділення на нуль");
+        }
+        int new_num = numerator * other.denominator;
+        int new_den = denominator * other.numerator;
+        return Fraction(new_num, new_den);
+    }
 
-    cout << "2. Введіть рядок: ";
-    cin.getline(str, 100);
-    removeAllChars(str, 'a');
-    cout << "   Після видалення всіх 'a': " << str << endl;
+    Fraction operator+(int value) const {
+        return *this + Fraction(value);
+    }
 
-    cout << "3. Введіть рядок: ";
-    cin.getline(str, 100);
-    insertCharAt(str, 2, 'X');
-    cout << "   Після вставки 'X' на позицію 2: " << str << endl;
-    
-    cout << "4. Введіть рядок: ";
-    cin.getline(str, 100);
-    replaceDots(str);
-    cout << "   Після заміни . на !: " << str << endl;
+    Fraction operator-(int value) const {
+        return *this - Fraction(value);
+    }
 
-    cout << "5. Введіть рядок: ";
-    cin.getline(str, 100);
-    char c;
-    cout << "   Введіть символ для підрахунку: ";
-    cin >> c;
-    cin.ignore(); 
-    cout << "   Символ '" << c << "' зустрічається " << countChar(str, c) << " разів" << endl;
+    Fraction operator*(int value) const {
+        return *this * Fraction(value);
+    }
 
-    cout << "6. Введіть рядок: ";
-    cin.getline(str, 100);
-    int letters, digits, others;
-    countChars(str, letters, digits, others);
-    cout << "   Літер: " << letters << ", цифр: " << digits << ", інших символів: " << others << endl;
-    
-    return 0;
-}
+    Fraction operator/(int value) const {
+        return *this / Fraction(value);
+    }
