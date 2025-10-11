@@ -1,0 +1,110 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+struct Person {
+    char surname[50];
+    int id;
+    int booksCount;
+};
+
+struct Book {
+    char title[100];
+    char author[50];
+    char genre[50];
+    bool isBorrowed;
+    int borrowerId;
+};
+
+void showMenu() {
+    cout << "\n=== БИБЛИОТЕКА ===\n";
+    cout << "1. Добавить книгу\n";
+    cout << "2. Добавить посетителя\n";
+    cout << "3. Поиск по названию\n";
+    cout << "4. Поиск по автору\n";
+    cout << "5. Поиск по жанру\n";
+    cout << "6. Выдать книгу\n";
+    cout << "7. Вернуть книгу\n";
+    cout << "8. Показать все книги\n";
+    cout << "9. Самый частый посетитель\n";
+    cout << "0. Выход\n";
+    cout << "Выбор: ";
+}
+
+int findPersonById(Person people[], int peopleCount, int id) {
+    for (int i = 0; i < peopleCount; i++) {
+        if (people[i].id == id) return i;
+    }
+    return -1;
+}
+
+void addBook(Book books[], int &booksCount) {
+    if (booksCount >= 1000) {
+        cout << "Библиотека полна!\n";
+        return;
+    }
+    Book b;
+    cout << "Название: ";
+    cin.ignore();
+    cin.getline(b.title, 100);
+    cout << "Автор: ";
+    cin.getline(b.author, 50);
+    cout << "Жанр: ";
+    cin.getline(b.genre, 50);
+    b.isBorrowed = false;
+    b.borrowerId = -1;
+    books[booksCount++] = b;
+    cout << "Книга добавлена!\n";
+}
+
+void addPerson(Person people[], int &peopleCount) {
+    if (peopleCount >= 1000) {
+        cout << "Достигнут лимит посетителей!\n";
+        return;
+    }
+    Person p;
+    cout << "Фамилия: ";
+    cin.ignore();
+    cin.getline(p.surname, 50);
+    cout << "ID: ";
+    cin >> p.id;
+    p.booksCount = 0;
+    people[peopleCount++] = p;
+    cout << "Посетитель добавлен!\n";
+}
+
+void searchByTitle(Book books[], int booksCount) {
+    char title[100];
+    cout << "Введите название: ";
+    cin.ignore();
+    cin.getline(title, 100);
+    bool found = false;
+    for (int i = 0; i < booksCount; i++) {
+        if (strstr(books[i].title, title) != nullptr) {
+            cout << books[i].title << " | " << books[i].author << " | " 
+                 << books[i].genre << " | " 
+                 << (books[i].isBorrowed ? "На руках" : "В библиотеке") << "\n";
+            found = true;
+        }
+    }
+    if (!found) cout << "Не найдено\n";
+}
+
+void searchByAuthor(Book books[], int booksCount) {
+    char author[50];
+    cout << "Введите автора: ";
+    cin.ignore();
+    cin.getline(author, 50);
+    bool found = false;
+    for (int i = 0; i < booksCount; i++) {
+        if (strstr(books[i].author, author) != nullptr) {
+            cout << books[i].title << " | " << books[i].author << " | " 
+                 << books[i].genre << " | " 
+                 << (books[i].isBorrowed ? "На руках" : "В библиотеке") << "\n";
+            found = true;
+        }
+    }
+    if (!found) cout << "Не найдено\n";
+}
+// дальше у меня код почему-то не запускает...
