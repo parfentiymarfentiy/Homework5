@@ -1,81 +1,33 @@
 #include <iostream>
+#include "phonebook.h"
 
-class Fraction {
-private:
-    int numerator;
-    int denominator;
+int main() {
+    PhoneBook book;
+    int choice;
 
-    int gcd(int a, int b) const {
-        while (b != 0) {
-            int temp = b;
-            b = a % b;
-            a = temp;
+    do {
+        std::cout << "\n=== ÒÅËÅÔÎÍÍÀ ÊÍÈÃÀ ===\n";
+        std::cout << "1. Äîäàòè êîíòàêò\n";
+        std::cout << "2. Âèäàëèòè êîíòàêò\n";
+        std::cout << "3. Ïîøóê êîíòàêòó\n";
+        std::cout << "4. Ïîêàçàòè âñ³ êîíòàêòè\n";
+        std::cout << "5. Çáåðåãòè ó ôàéë\n";
+        std::cout << "6. Çàâàíòàæèòè ç ôàéëó\n";
+        std::cout << "0. Âèõ³ä\n";
+        std::cout << "Âèá³ð: ";
+        std::cin >> choice;
+
+        switch (choice) {
+        case 1: book.addContact(); break;
+        case 2: book.deleteContact(); break;
+        case 3: book.searchContact(); break;
+        case 4: book.showAllContacts(); break;
+        case 5: book.saveToFile(); break;
+        case 6: book.loadFromFile(); break;
+        case 0: std::cout << "Äî ïîáà÷åííÿ!\n"; break;
+        default: std::cout << "Íåâ³ðíèé âèá³ð!\n";
         }
-        return a;
-    }
+    } while (choice != 0);
 
-    // Ð¤ÑƒÐ½ÐºÑ†Ñ–Ñ Ð´Ð»Ñ ÑÐ¿Ñ€Ð¾Ñ‰ÐµÐ½Ð½Ñ Ð´Ñ€Ð¾Ð±Ñƒ
-    void simplify() {
-        if (denominator == 0) {
-            throw std::invalid_argument("Ð—Ð½Ð°Ð¼ÐµÐ½Ð½Ð¸Ðº Ð½Ðµ Ð¼Ð¾Ð¶Ðµ Ð±ÑƒÑ‚Ð¸ Ð½ÑƒÐ»ÐµÐ¼");
-        }
-
-        if (denominator < 0) {
-            numerator = -numerator;
-            denominator = -denominator;
-        }
-
-        int common = gcd(abs(numerator), abs(denominator));
-        numerator /= common;
-        denominator /= common;
-    }
-
-public:
-    Fraction(int num = 0, int den = 1) : numerator(num), denominator(den) {
-        simplify();
-    }
-    int getNumerator() const { return numerator; }
-    int getDenominator() const { return denominator; }
-
-    Fraction operator+(const Fraction& other) const {
-        int new_num = numerator * other.denominator + other.numerator * denominator;
-        int new_den = denominator * other.denominator;
-        return Fraction(new_num, new_den);
-    }
-
-    Fraction operator-(const Fraction& other) const {
-        int new_num = numerator * other.denominator - other.numerator * denominator;
-        int new_den = denominator * other.denominator;
-        return Fraction(new_num, new_den);
-    }
-
-    Fraction operator*(const Fraction& other) const {
-        int new_num = numerator * other.numerator;
-        int new_den = denominator * other.denominator;
-        return Fraction(new_num, new_den);
-    }
-
-    Fraction operator/(const Fraction& other) const {
-        if (other.numerator == 0) {
-            throw std::invalid_argument("Ð”Ñ–Ð»ÐµÐ½Ð½Ñ Ð½Ð° Ð½ÑƒÐ»ÑŒ");
-        }
-        int new_num = numerator * other.denominator;
-        int new_den = denominator * other.numerator;
-        return Fraction(new_num, new_den);
-    }
-
-    Fraction operator+(int value) const {
-        return *this + Fraction(value);
-    }
-
-    Fraction operator-(int value) const {
-        return *this - Fraction(value);
-    }
-
-    Fraction operator*(int value) const {
-        return *this * Fraction(value);
-    }
-
-    Fraction operator/(int value) const {
-        return *this / Fraction(value);
-    }
+    return 0;
+}
