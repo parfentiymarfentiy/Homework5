@@ -1,137 +1,236 @@
-﻿
-// TASK 1 TASK 1 TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1TASK 1
+﻿using System;
 
-//using System;
+class Program
+{
+    static Student[] students = new Student[100];
+    static int studentCount = 0;
 
-//class Program
-//{
-//    static void DrawSquare(int sideLength, char symbol)
-//    {
-//        for (int i = 0; i < sideLength; i++)
-//        {
-//            for (int j = 0; j < sideLength; j++)
-//            {
-//                Console.Write(symbol + " ");
-//            }
-//            Console.WriteLine();
-//        }
-//    }
+    static void Main()
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("=== МЕНЮ СТУДЕНТІВ ===");
+            Console.WriteLine("1. Додати студента");
+            Console.WriteLine("2. Видалити студента");
+            Console.WriteLine("3. Показати всіх студентів");
+            Console.WriteLine("4. Додати оцінку студенту");
+            Console.WriteLine("5. Показати середній бал");
+            Console.WriteLine("6. Вийти");
+            Console.Write("Ваш вибір: ");
 
-//    static void Main()
-//    {
-//        Console.Write("Введите длину стороны квадрата: ");
-//        int length = int.Parse(Console.ReadLine());
+            string choice = Console.ReadLine();
 
-//        Console.Write("Введите символ для рисовфания: ");
-//        char symbol = Console.ReadKey().KeyChar;
-//        Console.WriteLine();
+            switch (choice)
+            {
+                case "1":
+                    AddStudent();
+                    break;
+                case "2":
+                    DeleteStudent();
+                    break;
+                case "3":
+                    ShowAllStudents();
+                    break;
+                case "4":
+                    AddGrade();
+                    break;
+                case "5":
+                    ShowAverage();
+                    break;
+                case "6":
+                    return;
+                default:
+                    Console.WriteLine("Невірний вибір!");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+    }
 
-//        DrawSquare(length, symbol);
-//    }
-//}
+    static void AddStudent()
+    {
+        Console.Write("Прізвище: ");
+        string lastName = Console.ReadLine();
+        Console.Write("Ім'я: ");
+        string firstName = Console.ReadLine();
+        Console.Write("По-батькові: ");
+        string middleName = Console.ReadLine();
+        Console.Write("Група: ");
+        string group = Console.ReadLine();
+        Console.Write("Вік: ");
+        int age = int.Parse(Console.ReadLine());
 
-// TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2TASK 2
+        students[studentCount] = new Student(lastName, firstName, middleName, group, age);
+        studentCount++;
+        Console.WriteLine("Студента додано!");
+        Console.ReadKey();
+    }
 
-//using System;
+    static void DeleteStudent()
+    {
+        ShowAllStudents();
+        Console.Write("Введіть номер студента для видалення: ");
+        int index = int.Parse(Console.ReadLine()) - 1;
 
-//class Program
-//{
-//    static bool IsPalindrome(int number)
-//    {
-//        int originalNumber = number;
-//        int reversedNumber = 0;
+        if (index >= 0 && index < studentCount)
+        {
+            for (int i = index; i < studentCount - 1; i++)
+            {
+                students[i] = students[i + 1];
+            }
+            studentCount--;
+            Console.WriteLine("Студента видалено!");
+        }
+        else
+        {
+            Console.WriteLine("Невірний номер!");
+        }
+        Console.ReadKey();
+    }
 
-//        while (number > 0)
-//        {
-//            int digit = number % 10;
-//            reversedNumber = reversedNumber * 10 + digit;
-//            number /= 10;
-//        }
+    static void ShowAllStudents()
+    {
+        Console.WriteLine("\n=== СПИСОК СТУДЕНТІВ ===");
+        for (int i = 0; i < studentCount; i++)
+        {
+            Console.WriteLine($"{i + 1}. {students[i]}");
+        }
+        if (studentCount == 0) Console.WriteLine("Студентів немає");
+        Console.ReadKey();
+    }
 
-//        return originalNumber == reversedNumber;
-//    }
+    static void AddGrade()
+    {
+        ShowAllStudents();
+        Console.Write("Виберіть студента: ");
+        int index = int.Parse(Console.ReadLine()) - 1;
 
-//    static void Main()
-//    {
-//        Console.Write("Введите число: ");
-//        int number = int.Parse(Console.ReadLine());
+        if (index >= 0 && index < studentCount)
+        {
+            Console.WriteLine("1. Програмування");
+            Console.WriteLine("2. Адміністрування");
+            Console.WriteLine("3. Дизайн");
+            Console.Write("Предмет: ");
+            int subject = int.Parse(Console.ReadLine()) - 1;
 
-//        bool result = IsPalindrome(number);
-//        Console.WriteLine($"Число {number} является палиндромом: {result}");
-//    }
-//}
+            Console.Write("Скільки оцінок додати? ");
+            int count = int.Parse(Console.ReadLine());
 
-// TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3TASK 3
+            int[] newGrades = new int[count];
+            for (int i = 0; i < count; i++)
+            {
+                Console.Write($"Оцінка {i + 1}: ");
+                newGrades[i] = int.Parse(Console.ReadLine());
+            }
 
-//using System;
-//using System.Linq;
+            students[index].AddGrades(subject, newGrades);
+            Console.WriteLine("Оцінки додано!");
+        }
+        else
+        {
+            Console.WriteLine("Невірний номер!");
+        }
+        Console.ReadKey();
+    }
 
-//class Program
-//{
-//    static int[] FilterArray(int[] originalArray, int[] filterArray)
-//    {
-//        return originalArray.Where(item => !filterArray.Contains(item)).ToArray();
-//    }
+    static void ShowAverage()
+    {
+        ShowAllStudents();
+        Console.Write("Виберіть студента: ");
+        int index = int.Parse(Console.ReadLine()) - 1;
 
-//    static void Main()
-//    {
-//        int[] original = { 1, 2, 6, -1, 88, 7, 6 };
-//        int[] filter = { 6, 88, 7 };
+        if (index >= 0 && index < studentCount)
+        {
+            Console.WriteLine("1. Програмування");
+            Console.WriteLine("2. Адміністрування");
+            Console.WriteLine("3. Дизайн");
+            Console.Write("Предмет: ");
+            int subject = int.Parse(Console.ReadLine()) - 1;
 
-//        int[] result = FilterArray(original, filter);
+            double avg = students[index].GetAverageGrade(subject);
+            Console.WriteLine($"Середній бал: {avg:F2}");
+        }
+        else
+        {
+            Console.WriteLine("Невірний номер!");
+        }
+        Console.ReadKey();
+    }
+}
 
-//        Console.WriteLine("Результат: " + string.Join(" ", result));
-//    }
-//}
+class Student
+{
+    private string lastName;
+    private string firstName;
+    private string middleName;
+    private string group;
+    private int age;
+    private int[] progGrades;
+    private int[] adminGrades;
+    private int[] designGrades;
 
-// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4// TASK 4
+    public Student(string lastName, string firstName, string middleName, string group, int age)
+    {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.group = group;
+        this.age = age;
+        progGrades = new int[0];
+        adminGrades = new int[0];
+        designGrades = new int[0];
+    }
 
-//using System;
+    public void AddGrades(int subject, int[] grades)
+    {
+        if (subject < 0 || subject > 2) return;
 
-//class Program
-//{
-//    static int CalculateExpression(string expression)
-//    {
-//        try
-//        {
-//            if (string.IsNullOrWhiteSpace(expression))
-//                throw new ArgumentException("Выражение не может быть пустым");
+        switch (subject)
+        {
+            case 0:
+                AddToArray(ref progGrades, grades);
+                break;
+            case 1:
+                AddToArray(ref adminGrades, grades);
+                break;
+            case 2:
+                AddToArray(ref designGrades, grades);
+                break;
+        }
+    }
 
-//            string[] parts = expression.Split('*');
+    private void AddToArray(ref int[] array, int[] newGrades)
+    {
+        int oldLength = array.Length;
+        Array.Resize(ref array, oldLength + newGrades.Length);
+        Array.Copy(newGrades, 0, array, oldLength, newGrades.Length);
+    }
 
-//            int result = 1;
+    public double GetAverageGrade(int subject)
+    {
+        int[] grades;
+        switch (subject)
+        {
+            case 0: grades = progGrades; break;
+            case 1: grades = adminGrades; break;
+            case 2: grades = designGrades; break;
+            default: return 0;
+        }
 
-//            foreach (string part in parts)
-//            {
-//                if (int.TryParse(part.Trim(), out int number))
-//                {
-//                    result *= number;
-//                }
-//                else
-//                {
-//                    throw new FormatException($"Некорректное число: '{part}'");
-//                }
-//            }
+        if (grades.Length == 0) return 0;
 
-//            return result;
-//        }
-//        catch (Exception ex)
-//        {
-//            Console.WriteLine($"Ошибка: {ex.Message}");
-//            return 0;
-//        }
-//    }
+        double sum = 0;
+        foreach (int grade in grades)
+        {
+            sum += grade;
+        }
+        return sum / grades.Length;
+    }
 
-//    static void Main()
-//    {
-//        Console.Write("Введите математическое выражение: ");
-//        string expression = Console.ReadLine();
-
-//        int result = CalculateExpression(expression);
-//        Console.WriteLine($"Результат: {result}");
-//    }
-//}
-
-// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5// TASK 5
-
-// ne sdelal :(
+    public override string ToString()
+    {
+        return $"{lastName} {firstName} {middleName}, {group}, {age} років. " +
+               $"Оцінки: Прог({progGrades.Length}), Адмін({adminGrades.Length}), Дизайн({designGrades.Length})";
+    }
+}
