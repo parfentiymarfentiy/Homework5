@@ -2,235 +2,187 @@
 
 class Program
 {
-    static Student[] students = new Student[100];
-    static int studentCount = 0;
-
     static void Main()
     {
+        Console.WriteLine("Введіть кількість рядків:");
+        int rows = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Введіть кількість стовпців:");
+        int cols = int.Parse(Console.ReadLine());
+
+        Matrix m = new Matrix(rows, cols);
+
         while (true)
         {
-            Console.Clear();
-            Console.WriteLine("=== МЕНЮ СТУДЕНТІВ ===");
-            Console.WriteLine("1. Додати студента");
-            Console.WriteLine("2. Видалити студента");
-            Console.WriteLine("3. Показати всіх студентів");
-            Console.WriteLine("4. Додати оцінку студенту");
-            Console.WriteLine("5. Показати середній бал");
-            Console.WriteLine("6. Вийти");
+            Console.WriteLine("\nМЕНЮ:");
+            Console.WriteLine("1. Показати матрицю");
+            Console.WriteLine("2. Максимальне значення");
+            Console.WriteLine("3. Мінімальне значення");
+            Console.WriteLine("4. Помножити на число");
+            Console.WriteLine("5. Помножити на матрицю 3x3");
+            Console.WriteLine("6. Транспонувати");
+            Console.WriteLine("7. Вийти");
             Console.Write("Ваш вибір: ");
 
-            string choice = Console.ReadLine();
+            int choice = int.Parse(Console.ReadLine());
 
             switch (choice)
             {
-                case "1":
-                    AddStudent();
+                case 1:
+                    m.Show();
                     break;
-                case "2":
-                    DeleteStudent();
+                case 2:
+                    Console.WriteLine("Максимум: " + m.GetMax());
                     break;
-                case "3":
-                    ShowAllStudents();
+                case 3:
+                    Console.WriteLine("Мінімум: " + m.GetMin());
                     break;
-                case "4":
-                    AddGrade();
+                case 4:
+                    Console.Write("Введіть число: ");
+                    int num = int.Parse(Console.ReadLine());
+                    Matrix r = m.Multiply(num);
+                    Console.WriteLine("Результат:");
+                    r.Show();
                     break;
-                case "5":
-                    ShowAverage();
+                case 5:
+                    if (rows == 3 && cols == 3)
+                    {
+                        Console.WriteLine("Введіть другу матрицю 3x3:");
+                        Matrix other = new Matrix(3, 3);
+                        Console.WriteLine("Друга матриця:");
+                        other.Show();
+                        Matrix res = m.MultiplyMatrix(other);
+                        Console.WriteLine("Результат множення:");
+                        res.Show();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Можна тільки для матриць 3x3!");
+                    }
                     break;
-                case "6":
+                case 6:
+                    Matrix t = m.Transpose();
+                    Console.WriteLine("Транспонована матриця:");
+                    t.Show();
+                    break;
+                case 7:
                     return;
-                default:
-                    Console.WriteLine("Невірний вибір!");
-                    Console.ReadKey();
-                    break;
             }
         }
-    }
-
-    static void AddStudent()
-    {
-        Console.Write("Прізвище: ");
-        string lastName = Console.ReadLine();
-        Console.Write("Ім'я: ");
-        string firstName = Console.ReadLine();
-        Console.Write("По-батькові: ");
-        string middleName = Console.ReadLine();
-        Console.Write("Група: ");
-        string group = Console.ReadLine();
-        Console.Write("Вік: ");
-        int age = int.Parse(Console.ReadLine());
-
-        students[studentCount] = new Student(lastName, firstName, middleName, group, age);
-        studentCount++;
-        Console.WriteLine("Студента додано!");
-        Console.ReadKey();
-    }
-
-    static void DeleteStudent()
-    {
-        ShowAllStudents();
-        Console.Write("Введіть номер студента для видалення: ");
-        int index = int.Parse(Console.ReadLine()) - 1;
-
-        if (index >= 0 && index < studentCount)
-        {
-            for (int i = index; i < studentCount - 1; i++)
-            {
-                students[i] = students[i + 1];
-            }
-            studentCount--;
-            Console.WriteLine("Студента видалено!");
-        }
-        else
-        {
-            Console.WriteLine("Невірний номер!");
-        }
-        Console.ReadKey();
-    }
-
-    static void ShowAllStudents()
-    {
-        Console.WriteLine("\n=== СПИСОК СТУДЕНТІВ ===");
-        for (int i = 0; i < studentCount; i++)
-        {
-            Console.WriteLine($"{i + 1}. {students[i]}");
-        }
-        if (studentCount == 0) Console.WriteLine("Студентів немає");
-        Console.ReadKey();
-    }
-
-    static void AddGrade()
-    {
-        ShowAllStudents();
-        Console.Write("Виберіть студента: ");
-        int index = int.Parse(Console.ReadLine()) - 1;
-
-        if (index >= 0 && index < studentCount)
-        {
-            Console.WriteLine("1. Програмування");
-            Console.WriteLine("2. Адміністрування");
-            Console.WriteLine("3. Дизайн");
-            Console.Write("Предмет: ");
-            int subject = int.Parse(Console.ReadLine()) - 1;
-
-            Console.Write("Скільки оцінок додати? ");
-            int count = int.Parse(Console.ReadLine());
-
-            int[] newGrades = new int[count];
-            for (int i = 0; i < count; i++)
-            {
-                Console.Write($"Оцінка {i + 1}: ");
-                newGrades[i] = int.Parse(Console.ReadLine());
-            }
-
-            students[index].AddGrades(subject, newGrades);
-            Console.WriteLine("Оцінки додано!");
-        }
-        else
-        {
-            Console.WriteLine("Невірний номер!");
-        }
-        Console.ReadKey();
-    }
-
-    static void ShowAverage()
-    {
-        ShowAllStudents();
-        Console.Write("Виберіть студента: ");
-        int index = int.Parse(Console.ReadLine()) - 1;
-
-        if (index >= 0 && index < studentCount)
-        {
-            Console.WriteLine("1. Програмування");
-            Console.WriteLine("2. Адміністрування");
-            Console.WriteLine("3. Дизайн");
-            Console.Write("Предмет: ");
-            int subject = int.Parse(Console.ReadLine()) - 1;
-
-            double avg = students[index].GetAverageGrade(subject);
-            Console.WriteLine($"Середній бал: {avg:F2}");
-        }
-        else
-        {
-            Console.WriteLine("Невірний номер!");
-        }
-        Console.ReadKey();
     }
 }
 
-class Student
+class Matrix
 {
-    private string lastName;
-    private string firstName;
-    private string middleName;
-    private string group;
-    private int age;
-    private int[] progGrades;
-    private int[] adminGrades;
-    private int[] designGrades;
+    private int[,] table;
+    private int rows;
+    private int cols;
 
-    public Student(string lastName, string firstName, string middleName, string group, int age)
+    public Matrix(int r, int c)
     {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.group = group;
-        this.age = age;
-        progGrades = new int[0];
-        adminGrades = new int[0];
-        designGrades = new int[0];
-    }
+        rows = r;
+        cols = c;
+        table = new int[rows, cols];
 
-    public void AddGrades(int subject, int[] grades)
-    {
-        if (subject < 0 || subject > 2) return;
-
-        switch (subject)
+        Random rand = new Random();
+        for (int i = 0; i < rows; i++)
         {
-            case 0:
-                AddToArray(ref progGrades, grades);
-                break;
-            case 1:
-                AddToArray(ref adminGrades, grades);
-                break;
-            case 2:
-                AddToArray(ref designGrades, grades);
-                break;
+            for (int j = 0; j < cols; j++)
+            {
+                table[i, j] = rand.Next(1, 10);
+            }
         }
     }
 
-    private void AddToArray(ref int[] array, int[] newGrades)
+    public void Show()
     {
-        int oldLength = array.Length;
-        Array.Resize(ref array, oldLength + newGrades.Length);
-        Array.Copy(newGrades, 0, array, oldLength, newGrades.Length);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                Console.Write(table[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
     }
 
-    public double GetAverageGrade(int subject)
+    public int GetMax()
     {
-        int[] grades;
-        switch (subject)
+        int max = table[0, 0];
+        for (int i = 0; i < rows; i++)
         {
-            case 0: grades = progGrades; break;
-            case 1: grades = adminGrades; break;
-            case 2: grades = designGrades; break;
-            default: return 0;
+            for (int j = 0; j < cols; j++)
+            {
+                if (table[i, j] > max) max = table[i, j];
+            }
         }
-
-        if (grades.Length == 0) return 0;
-
-        double sum = 0;
-        foreach (int grade in grades)
-        {
-            sum += grade;
-        }
-        return sum / grades.Length;
+        return max;
     }
 
-    public override string ToString()
+    public int GetMin()
     {
-        return $"{lastName} {firstName} {middleName}, {group}, {age} років. " +
-               $"Оцінки: Прог({progGrades.Length}), Адмін({adminGrades.Length}), Дизайн({designGrades.Length})";
+        int min = table[0, 0];
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                if (table[i, j] < min) min = table[i, j];
+            }
+        }
+        return min;
+    }
+
+    public Matrix Multiply(int number)
+    {
+        Matrix result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                result.table[i, j] = table[i, j] * number;
+            }
+        }
+        return result;
+    }
+
+    public Matrix MultiplyMatrix(Matrix other)
+    {
+        if (rows != 3 || cols != 3 || other.rows != 3 || other.cols != 3)
+        {
+            Console.WriteLine("Помилка: тільки матриці 3x3!");
+            return this;
+        }
+
+        Matrix result = new Matrix(3, 3);
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                int sum = 0;
+                for (int k = 0; k < 3; k++)
+                {
+                    sum += table[i, k] * other.table[k, j];
+                }
+                result.table[i, j] = sum;
+            }
+        }
+
+        return result;
+    }
+
+    public Matrix Transpose()
+    {
+        Matrix result = new Matrix(cols, rows);
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                result.table[j, i] = table[i, j];
+            }
+        }
+
+        return result;
     }
 }
